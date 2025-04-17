@@ -1,0 +1,9 @@
+ROLE_PERMISSIONS = {
+    "doctor": ["prescribe", "view_vitals"],
+    "nurse": ["view_vitals"],
+    "pharmacist": ["dispense_medicine"],
+    "administrator": ["manage_users"],
+    "receptionist": ["schedule_appointments"],
+    "patient": ["view_records"],
+    "lab_technician": ["conduct_tests"],
+}
