@@ -31,5 +31,11 @@ def isolation_forest_model():
     print("Flagged Suspicious Logins:")
     print(suspicious)
 
+    # Save the model and scaler
+    joblib.dump(model, 'isolation_forest_model.pkl')
+    joblib.dump(scaler, 'scaler.pkl')
+    joblib.dump(label_encoder, 'label_encoder.pkl') 
+
+
 if __name__ == "__main__":
     isolation_forest_model()
