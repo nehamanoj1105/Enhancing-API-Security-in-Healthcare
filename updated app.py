@@ -11,6 +11,7 @@ db = SQLAlchemy()
 
 model = joblib.load("isolation_forest_model.pkl")
 scaler = joblib.load("scaler.pkl")
+label_encoder = joblib.load("label_encoder.pkl")
 
 def create_app():
     app = Flask(__name__)
@@ -44,8 +45,7 @@ def create_app():
         
         # Handle categorical data (if 'login_location' is a string)
         if isinstance(input_data['login_location'][0], str):
-            encoder = LabelEncoder()
-            input_data['login_location'] = encoder.fit_transform(input_data['login_location'])
+            input_data['login_location'] = label_encoder.transform(input_data['login_location'])
 
         
         input_scaled = scaler.transform(input_data)
