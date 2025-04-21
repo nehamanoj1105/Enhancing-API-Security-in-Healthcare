@@ -4,8 +4,33 @@ import bcrypt
 import jwt
 import datetime
 from functions import token_required, require_role
+from app import db  
 
 def register_routes(app):
+    @app.route('/auth/register', methods=['POST'])
+    def register():
+        data = request.get_json()
+        username = data.get('username')
+        password = data.get('password')
+        role = data.get('role')
+
+        if not username or not password or not role:
+            return jsonify({'message': 'Username, password, and role are required'}), 400
+
+        if User.query.filter_by(username=username).first():
+            return jsonify({'message': 'Username already exists'}), 409
+
+        allowed_roles = ['doctor', 'nurse', 'receptionist', 'pharmacist', 'patient', 'admin']
+        if role not in allowed_roles:
+            return jsonify({'message': f'Invalid role. Choose from: {", ".join(allowed_roles)}'}), 400
+
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        new_user = User(username=username, password=hashed_password, role=role)
+        db.session.add(new_user)
+        db.session.commit()
+
+        return jsonify({'message': f'User {username} registered successfully as {role}'}), 201
+
     @app.route('/auth/login', methods=['POST'])
     def login():
         data = request.get_json()
@@ -40,3 +65,4 @@ def register_routes(app):
     @app.route('/public', methods=['GET'])
     def public():
         return jsonify({'message': 'This is a public endpoint, no token needed.'})
+

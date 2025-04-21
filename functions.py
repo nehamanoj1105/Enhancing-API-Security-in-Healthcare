@@ -40,11 +40,23 @@ def require_role(role):
 
 def create_default_users():
     if User.query.count() == 0:
-        hashed_password = bcrypt.hashpw('password123'.encode('utf-8'), bcrypt.gensalt())
+        password = 'password123'
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
         users = [
-            User(username='alice', password=hashed_password, role='doctor'),
-            User(username='bob', password=hashed_password, role='nurse'),
-            User(username='claire', password=hashed_password, role='receptionist')
+            User(username='dr_arjun', password=hashed_password, role='doctor'),
+            User(username='dr_sneha', password=hashed_password, role='doctor'),
+            User(username='nurse_riya', password=hashed_password, role='nurse'),
+            User(username='nurse_karthik', password=hashed_password, role='nurse'),
+            User(username='receptionist_meera', password=hashed_password, role='receptionist'),
+            User(username='pharma_rakesh', password=hashed_password, role='pharmacist'),
+            User(username='pharma_pooja', password=hashed_password, role='pharmacist'),
+            User(username='admin_ankit', password=hashed_password, role='admin'),
+            User(username='patient_rahul', password=hashed_password, role='patient'),
+            User(username='patient_divya', password=hashed_password, role='patient')
         ]
+
         db.session.bulk_save_objects(users)
         db.session.commit()
+        print("Default Indian users created.")
+
