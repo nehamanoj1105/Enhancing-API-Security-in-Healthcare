@@ -19,7 +19,7 @@ def isolation_forest_model():
 
     scaler = StandardScaler()
     X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X)
+    X_test_scaled = scaler.transform(X_test)
 
     model = IsolationForest(contamination=0.1, random_state=42)
     model.fit(X_train_scaled)
