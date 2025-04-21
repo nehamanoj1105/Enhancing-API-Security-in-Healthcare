@@ -54,7 +54,7 @@ def create_app():
         prediction = model.predict(input_scaled)
         
        
-        if prediction == -1:
+        if prediction[0] == -1:
             return jsonify({"message": "Anomaly detected"}), 200
         else:
             return jsonify({"message": "Normal login"}), 200
