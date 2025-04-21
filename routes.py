@@ -1,4 +1,5 @@
-from flask import request, jsonify, g, Blueprint, current_app
+from flask import request, jsonify, g, Blueprint
+from flasgger import swag_from
 import pandas as pd
 import joblib
 import bcrypt
@@ -15,6 +16,45 @@ model = joblib.load('model.pkl')
 label_encoder = joblib.load('label_encoder.pkl')
 
 @routes.route('/predict', methods=['POST'])
+@swag_from({
+    'tags': ['Anomaly Detection'],
+    'description': 'Detects login anomaly based on login time, failed attempts, and location.',
+    'parameters': [
+        {
+            'name': 'data',
+            'in': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'login_time': {
+                        'type': 'string',
+                        'example': '2025-04-21T23:59:59'
+                    },
+                    'failed_attempts': {
+                        'type': 'integer',
+                        'example': 3
+                    },
+                    'login_location': {
+                        'type': 'string',
+                        'example': 'New York'
+                    }
+                }
+            }
+        }
+    ],
+    'responses': {
+        '200': {
+            'description': 'Anomaly detected or normal login',
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'message': {'type': 'string'}
+                }
+            }
+        }
+    }
+})
 def predict_anomaly():
     data = request.get_json()
     login_time = data['login_time']
@@ -41,6 +81,38 @@ def predict_anomaly():
         return jsonify({"message": "Normal login"})
 
 @routes.route('/auth/register', methods=['POST'])
+@swag_from({
+    'tags': ['Authentication'],
+    'description': 'Registers a new user with a specified role.',
+    'parameters': [
+        {
+            'name': 'data',
+            'in': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'username': {'type': 'string', 'example': 'johndoe'},
+                    'password': {'type': 'string', 'example': 'password123'},
+                    'role': {'type': 'string', 'example': 'doctor'}
+                }
+            }
+        }
+    ],
+    'responses': {
+        '201': {
+            'description': 'User successfully registered',
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'message': {'type': 'string'}
+                }
+            }
+        },
+        '400': {'description': 'Invalid request'},
+        '409': {'description': 'Username already exists'}
+    }
+})
 def register():
     data = request.get_json()
     username = data.get('username')
@@ -65,6 +137,36 @@ def register():
     return jsonify({'message': f'User {username} registered successfully as {role}'}), 201
 
 @routes.route('/auth/login', methods=['POST'])
+@swag_from({
+    'tags': ['Authentication'],
+    'description': 'Logs in a user and returns a JWT token.',
+    'parameters': [
+        {
+            'name': 'data',
+            'in': 'body',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'username': {'type': 'string', 'example': 'johndoe'},
+                    'password': {'type': 'string', 'example': 'password123'}
+                }
+            }
+        }
+    ],
+    'responses': {
+        '200': {
+            'description': 'Successful login with JWT token',
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'token': {'type': 'string'}
+                }
+            }
+        },
+        '401': {'description': 'Invalid credentials'}
+    }
+})
 def login():
     data = request.get_json()
     username = data.get('username')
@@ -86,17 +188,67 @@ def login():
 @routes.route('/doctor/prescribe', methods=['GET'])
 @token_required
 @require_role('doctor')
+@swag_from({
+    'tags': ['Doctor Operations'],
+    'description': 'Allows doctors to prescribe medicine.',
+    'responses': {
+        '200': {
+            'description': 'Doctor can prescribe medicine',
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'message': {'type': 'string', 'example': 'Dr. John can prescribe medicine.'}
+                }
+            }
+        },
+        '403': {
+            'description': 'Forbidden: User is not a doctor'
+        }
+    }
+})
 def prescribe():
     return jsonify({'message': f'Dr. {g.user["username"]} can prescribe medicine.'})
 
 @routes.route('/nurse/vitals', methods=['GET'])
 @token_required
+@swag_from({
+    'tags': ['Nurse Operations'],
+    'description': 'Allows nurses or doctors to record vitals.',
+    'responses': {
+        '200': {
+            'description': 'Vitals accessed successfully',
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'message': {'type': 'string', 'example': 'Nurse John is accessing vitals.'}
+                }
+            }
+        },
+        '403': {
+            'description': 'Forbidden: Only nurses or doctors can access vitals'
+        }
+    }
+})
 def vitals():
     if g.user['role'] not in ['nurse', 'doctor']:
         return jsonify({'message': 'Only nurses or doctors can record vitals.'}), 403
     return jsonify({'message': f'{g.user["role"].title()} {g.user["username"]} is accessing vitals.'})
 
 @routes.route('/public', methods=['GET'])
+@swag_from({
+    'tags': ['Public Operations'],
+    'description': 'A public endpoint accessible without a token.',
+    'responses': {
+        '200': {
+            'description': 'Public access granted',
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'message': {'type': 'string', 'example': 'This is a public endpoint, no token needed.'}
+                }
+            }
+        }
+    }
+})
 def public():
     return jsonify({'message': 'This is a public endpoint, no token needed.'})
-
