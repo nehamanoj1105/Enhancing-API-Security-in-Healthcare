@@ -43,9 +43,11 @@ def create_app():
        
         input_data = pd.DataFrame([[login_time, failed_attempts, login_location]], columns=['login_time', 'failed_attempts', 'login_location'])
         
-        # Handle categorical data (if 'login_location' is a string)
+       
         if isinstance(input_data['login_location'][0], str):
-            input_data['login_location'] = label_encoder.transform(input_data['login_location'])
+            if login_location not in label_encoder.classes_:
+                input_data['login_location'] = 'Unknown'
+            input_data['login_location'] = label_encoder.transform([input_data['login_location'][0]])
 
         
         input_scaled = scaler.transform(input_data)
