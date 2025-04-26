@@ -78,11 +78,7 @@ print("\nBest parameters found: ", grid_search.best_params_)
 # Make predictions on new data
 #predictions = model.predict(new_data_scaled)'''
 # Save the Random Forest model
-save_directory = r"C:\Users\nehan\OneDrive\Desktop\sem4\system security\project\\"
-
-# Save the model and other files in the specified directory without printing the file paths
-joblib.dump(model, save_directory + 'random_forest_model.pkl');
-joblib.dump(scaler, save_directory + 'scaler.pkl');
-joblib.dump(label_encoder, save_directory + 'label_encoder.pkl');
-
-# Now the output should not show any unwanted file paths.
+#save_directory = r" path to save the file "
+#joblib.dump(model, save_directory + 'random_forest_model.pkl');
+#joblib.dump(scaler, save_directory + 'scaler.pkl');
+#joblib.dump(label_encoder, save_directory + 'label_encoder.pkl');
