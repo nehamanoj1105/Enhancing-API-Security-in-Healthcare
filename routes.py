@@ -12,7 +12,7 @@ from extensions import db
 routes = Blueprint('routes', __name__)
 
 scaler = joblib.load('scaler.pkl')
-model = joblib.load('model.pkl')
+model = joblib.load('random_forest_model.pkl')
 label_encoder = joblib.load('label_encoder.pkl')
 
 @routes.route('/predict', methods=['POST'])
