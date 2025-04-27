@@ -1,7 +1,7 @@
 # Enhancing API Security in Healthcare with Flask
 
-## Problem StatementSecuring 
-API-to-API communication in healthcare is crucial to protect sensitive patient data and ensure smooth interaction between various systems (EHRs, pharmacies, etc.). Traditional security methods, like perimeter-based authentication, are increasingly vulnerable to attacks. This project aims to implement Zero Trust Architecture (ZTA), ensuring all API requests are verified, authenticated, and authorized.
+## Problem Statement
+Securing API-to-API communication in healthcare is crucial to protect sensitive patient data and ensure smooth interaction between various systems (EHRs, pharmacies, etc.). Traditional security methods, like perimeter-based authentication, are increasingly vulnerable to attacks. This project aims to implement Zero Trust Architecture (ZTA), ensuring all API requests are verified, authenticated, and authorized.
 
 This solution combines Zero Trust, advanced access control, and AI to safeguard healthcare APIs from unauthorized access and data breaches.
 This project aims to build a secure healthcare API backend with:
