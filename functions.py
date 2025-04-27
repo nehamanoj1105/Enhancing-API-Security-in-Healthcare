@@ -3,7 +3,7 @@ from flask import request, jsonify, g, current_app
 import jwt
 import bcrypt
 from users import User
-from app import db
+from extensions import db
 
 def token_required(f):
     @wraps(f)

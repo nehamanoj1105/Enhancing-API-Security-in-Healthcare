@@ -1,0 +1,96 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Healthcare API",
+    "description": "API documentation for the Healthcare system.",
+    "version": "1.0.0"
+  },
+  "host": "127.0.0.1:5000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "summary": "Register a new user",
+        "description": "This endpoint registers a new user to the system.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "description": "User object that needs to be registered",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User successfully registered"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "409": {
+            "description": "Username already exists"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Login user",
+        "description": "This endpoint logs a user in and returns a JWT token.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "credentials",
+            "description": "User credentials (username and password)",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Credentials"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful login and JWT token returned"
+          },
+          "401": {
+            "description": "Invalid credentials"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        }
+      }
+    },
+    "Credentials": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
+
