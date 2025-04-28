@@ -63,7 +63,7 @@ This project aims to build a secure healthcare API backend with:
 
 ```bash
 # Clone the repository
-git clone <repo-url>
+git clone https://github.com/nehamanoj1105/Enhancing-API-Security-in-Healthcare
 cd Enhancing-API-Security-in-Healthcare
 
 # Create and activate a virtual environment (recommended)
