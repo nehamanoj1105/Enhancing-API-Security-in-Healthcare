@@ -59,4 +59,3 @@ def create_default_users():
         db.session.bulk_save_objects(users)
         db.session.commit()
         print("Default Indian users created.")
-
